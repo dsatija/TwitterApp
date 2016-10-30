@@ -1,0 +1,88 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                tools:context=".activities.ComposeTweetActivity"
+                android:background="@color/white"
+                android:id="@+id/est">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/composetoolbar"
+        android:minHeight="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/light_blue"
+        android:layout_marginBottom="-15dp"
+        app:titleTextColor="@color/white"
+
+        >
+
+    </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:id="@+id/ivBirdlogo2"
+        android:src="@mipmap/ic_twit"
+        android:contentDescription="birdlogo"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/composetoolbar"
+        android:layout_alignStart="@+id/composetoolbar"/>
+
+    <ImageView
+        android:id="@+id/ivComposeProfileImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="15dp"
+        android:contentDescription="Profile Image"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_below="@+id/composetoolbar"
+        android:layout_alignLeft="@+id/composetoolbar"
+        android:layout_alignStart="@+id/composetoolbar"/>
+
+
+
+
+    <TextView
+        android:id="@+id/tvComposeScreenName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:text="Foo"
+        android:layout_marginTop="25dp"
+        android:textStyle="bold"
+        android:layout_above="@+id/tvComposeUsername"
+        android:layout_toRightOf="@+id/ivComposeProfileImage"
+        android:layout_toEndOf="@+id/ivComposeProfileImage"/>
+
+    <EditText
+        android:id="@+id/etcomposeTweet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="140"
+        android:ems="10"
+        android:layout_marginLeft="15dp"
+        android:backgroundTint="@color/light_blue"
+        android:hint="What's happening?"
+        android:paddingLeft="5dp"
+        android:layout_below="@+id/ivComposeProfileImage"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="37dp">
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/tvComposeUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivComposeProfileImage"
+        android:layout_alignLeft="@+id/tvComposeScreenName"
+        android:paddingLeft="5dp"
+        android:text="\@foo"
+        android:textColor="#909090" />
+
+</RelativeLayout>
