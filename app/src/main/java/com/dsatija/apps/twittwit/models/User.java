@@ -15,7 +15,6 @@ import org.json.JSONObject;
  */
 @Table(database = MyDatabase.class)
 public class User extends BaseModel {
-
     //attributes
 
     public void setUid(long uid) {
@@ -36,30 +35,25 @@ public class User extends BaseModel {
 
     @Column
     private String name;
-
     @Column
     @PrimaryKey
     private long uid;
-
     @Column
     private String screenName;
-
     @Column
     private String profileImageUrl;
 
     //deserialise user
-    public static User fromJson(JSONObject json){
-
-        User u  = new User();
+    public static User fromJson(JSONObject json) {
+        User u = new User();
         try {
             u.name = json.getString("name");
-            u.uid=json.getLong("id");
+            u.uid = json.getLong("id");
             u.screenName = json.getString("screen_name");
-            u.profileImageUrl=json.getString("profile_image_url");
+            u.profileImageUrl = json.getString("profile_image_url");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         return u;
     }
 
@@ -79,7 +73,7 @@ public class User extends BaseModel {
         return profileImageUrl;
     }
 
-    public static User findById(Long id){
+    public static User findById(Long id) {
         return SQLite.select().
                 from(User.class).
                 where(User_Table.uid.eq(id)).querySingle();

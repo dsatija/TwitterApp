@@ -1,13 +1,10 @@
 <resources>
 
 
-
-
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item></style>
-
-
+        <item name="windowNoTitle">true</item>
+    </style>
 
 
     <!-- Application theme. -->
@@ -29,12 +26,11 @@
 
 
     <!-- the theme applied to the application or activity -->
-   <!-- <style name="CustomActionBarTheme" parent="Theme.AppCompat.Dar">
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
-    </style>-->
+    <!-- <style name="CustomActionBarTheme" parent="Theme.AppCompat.Dar">
+         <item name="android:actionBarStyle">@style/MyActionBar</item>
+     </style>-->
 
     <!-- ActionBar styles -->
-
 
 
 </resources>

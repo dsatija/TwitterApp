@@ -1,8 +1,8 @@
 package com.dsatija.apps.twittwit.listeners;
-
 /**
  * Created by Disha on 10/20/2016.
  */
+
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 
@@ -49,7 +49,6 @@ public abstract class EndlessScrollListener implements OnScrollListener {
                 this.loading = true;
             }
         }
-
         // If it’s still loading, we check to see if the dataset count has
         // changed, if so we conclude it has finished loading and update the
         // current page
@@ -59,7 +58,6 @@ public abstract class EndlessScrollListener implements OnScrollListener {
             previousTotalItemCount = totalItemCount;
             currentPage++;
         }
-
         // If it isn’t currently loading, we check to see if we have breached
         // the visibleThreshold and need to reload more data.
         // If we do need to reload some more data, we execute onLoadMore to

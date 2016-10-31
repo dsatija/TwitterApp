@@ -23,26 +23,21 @@ import com.dsatija.apps.twittwit.TwitterClient;
 import com.dsatija.apps.twittwit.models.User;
 
 public class ComposeTweetActivity extends AppCompatActivity {
-
     private SharedPreferences prefs;
     private ImageView ivProfileImage;
     private TextView tvScreenName;
     private TextView tvUserName;
     private EditText etTweet;
     private Menu menu;
-
     private User user;
-
     private TwitterClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose_tweet);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.composetoolbar);
         setSupportActionBar(toolbar);
-
         prefs = this.getSharedPreferences("com.dsatija.apps.twittwit", Context.MODE_PRIVATE);
         client = TwitterApplication.getRestClient();
         setupviews();
@@ -77,14 +72,12 @@ public class ComposeTweetActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void setupHandlers(){
-        etTweet.addTextChangedListener(new TextWatcher(){
-
+    private void setupHandlers() {
+        etTweet.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
                 // TODO Auto-generated method stub
-
             }
 
             @Override
@@ -99,25 +92,23 @@ public class ComposeTweetActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 // TODO Auto-generated method stub
-
             }
         });
     }
-    private void loadLoginUserData(){
+
+    private void loadLoginUserData() {
         Long userId = prefs.getLong("userId", -1L);
-        if (userId == null || userId.equals(-1L)){
+        if (userId == null || userId.equals(-1L)) {
             Log.e("ERROR", "profile data not availabel");
-        }
-        else{
-            user = (User) User.findById(userId);
-            if (user == null){
+        } else {
+            user = User.findById(userId);
+            if (user == null) {
                 Log.e("ERROR", "Can't find user with userId=" + userId);
             }
             ivProfileImage.setImageResource(android.R.color.transparent);
             Glide.with(getApplicationContext())
                     .load(user.getProfileImageUrl()).fitCenter().centerCrop()
                     .into(ivProfileImage);
-
             tvScreenName.setText(user.getName());
             tvUserName.setText("@" + user.getScreenName());
         }

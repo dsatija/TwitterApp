@@ -8,14 +8,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_gravity="center"
     android:orientation="vertical">
-    <ImageView android:layout_height="125dp"
-               android:layout_width="125dp"
-               android:src="@mipmap/ic_twit"
 
-               android:id="@+id/ivLogo2"
-               android:contentDescription="@string/logo"
-               android:layout_alignParentTop="true"
-               android:layout_centerHorizontal="true"
-               android:layout_marginTop="133dp"/>
+    <ImageView
+        android:layout_height="125dp"
+        android:layout_width="125dp"
+        android:src="@mipmap/ic_twit"
+
+        android:id="@+id/ivLogo2"
+        android:contentDescription="@string/logo"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="133dp"/>
 </RelativeLayout>
 
