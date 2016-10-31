@@ -1,4 +1,4 @@
-package com.dsatija.apps.twittwit;
+package com.dsatija.apps.twittwit.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.dsatija.apps.twittwit.R;
 import com.dsatija.apps.twittwit.models.Tweet;
 
 import java.util.List;

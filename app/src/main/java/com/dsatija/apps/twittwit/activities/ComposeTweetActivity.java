@@ -18,8 +18,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dsatija.apps.twittwit.R;
-import com.dsatija.apps.twittwit.TwitterApplication;
-import com.dsatija.apps.twittwit.TwitterClient;
+import com.dsatija.apps.twittwit.network.TwitterApplication;
+import com.dsatija.apps.twittwit.network.TwitterClient;
 import com.dsatija.apps.twittwit.models.User;
 
 public class ComposeTweetActivity extends AppCompatActivity {

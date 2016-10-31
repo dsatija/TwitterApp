@@ -1,4 +1,4 @@
-package com.dsatija.apps.twittwit;
+package com.dsatija.apps.twittwit.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.dsatija.apps.twittwit.activities.ComposeTweetActivity;
+import com.dsatija.apps.twittwit.R;
+import com.dsatija.apps.twittwit.adapter.TweetsArrayAdapter;
+import com.dsatija.apps.twittwit.network.TwitterApplication;
+import com.dsatija.apps.twittwit.network.TwitterClient;
 import com.dsatija.apps.twittwit.listeners.EndlessScrollListener;
 import com.dsatija.apps.twittwit.models.Tweet;
 import com.dsatija.apps.twittwit.models.User;
