@@ -17,7 +17,7 @@
         android:maxSdkVersion="18"/>
 
     <application
-        android:name=".TwitterApplication"
+        android:name=".network.TwitterApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_twit"
         android:label=""
@@ -31,14 +31,14 @@
             android:name="AA_DB_VERSION"
             android:value="1"/>
 
-        <activity android:name=".SplashScreenActivity">
+        <activity android:name=".activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
 
@@ -50,7 +50,7 @@
                     android:scheme="oauth"/>
             </intent-filter>
         </activity>
-        <activity android:name=".TimelineActivity"/>
+        <activity android:name=".activities.TimelineActivity"/>
         />
         <activity android:name=".activities.ComposeTweetActivity">
         </activity>

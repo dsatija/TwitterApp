@@ -2,7 +2,7 @@ package com.dsatija.apps.twittwit.models;
 
 import android.text.format.DateUtils;
 
-import com.dsatija.apps.twittwit.MyDatabase;
+import com.dsatija.apps.twittwit.dao.MyDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;

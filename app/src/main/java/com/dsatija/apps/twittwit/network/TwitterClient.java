@@ -1,4 +1,4 @@
-package com.dsatija.apps.twittwit;
+package com.dsatija.apps.twittwit.network;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package com.dsatija.apps.twittwit;
+package com.dsatija.apps.twittwit.network;
 
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowLog;

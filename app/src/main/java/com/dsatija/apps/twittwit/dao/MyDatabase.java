@@ -1,4 +1,4 @@
-package com.dsatija.apps.twittwit;
+package com.dsatija.apps.twittwit.dao;
 
 import com.raizlabs.android.dbflow.annotation.Database;
 

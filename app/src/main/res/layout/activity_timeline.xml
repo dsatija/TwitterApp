@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context=".TimelineActivity">
+    tools:context=".activities.TimelineActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
