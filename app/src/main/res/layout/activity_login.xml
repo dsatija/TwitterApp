@@ -1,0 +1,74 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                tools:context=".LoginActivity"
+                android:background="@color/light_blue">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="loginToRest"
+        android:text="@string/log_in"
+
+        android:textSize="20sp"
+        android:layout_marginBottom="25dp"
+        android:id="@+id/button"
+        android:background="@drawable/shape"
+        android:textColor="@color/light_blue"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/tvSubheading"
+        android:layout_alignStart="@+id/tvSubheading"
+        android:layout_alignRight="@+id/tvSubheading"
+        android:layout_alignEnd="@+id/tvSubheading"
+        />
+
+    <ImageView
+
+        android:id="@+id/ivlogin"
+        android:src="@mipmap/ic_twit"
+        android:contentDescription="@string/logo_login"
+        android:layout_height="75dp"
+        android:layout_width="75dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="41dp"
+        android:layout_marginStart="41dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/welcome_to_twittwit"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="40sp"
+        android:id="@+id/tvHeading"
+        android:layout_marginRight="41dp"
+        android:layout_marginTop="38dp"
+        android:layout_below="@+id/ivlogin"
+        android:layout_alignLeft="@+id/ivlogin"
+        android:layout_alignStart="@+id/ivlogin"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/see_what_s_happening_in_the_world_right_now"
+        android:id="@+id/tvSubheading"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        android:layout_below="@+id/tvHeading"
+        android:layout_marginTop="36dp"
+        android:layout_alignLeft="@+id/tvHeading"
+        android:layout_alignStart="@+id/tvHeading"
+        android:layout_alignRight="@+id/tvHeading"
+        android:layout_alignEnd="@+id/tvHeading"/>
+
+</RelativeLayout>
