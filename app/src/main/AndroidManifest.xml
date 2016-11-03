@@ -20,7 +20,7 @@
         android:name=".network.TwitterApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_twit"
-        android:label=""
+        android:label="Timeline"
         android:theme="@style/AppTheme">
 
         <!--  -->
@@ -53,6 +53,8 @@
         <activity android:name=".activities.TimelineActivity"/>
         />
         <activity android:name=".activities.ComposeTweetActivity">
+        </activity>
+        <activity android:name=".activities.ProfileActivity">
         </activity>
     </application>
 

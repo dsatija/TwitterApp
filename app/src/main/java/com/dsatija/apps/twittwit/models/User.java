@@ -43,6 +43,24 @@ public class User extends BaseModel {
     @Column
     private String profileImageUrl;
 
+
+    public String getTagLine() {
+        return tagline;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public int getFriendsCount() {
+        return followingCount;
+    }
+
+    private String tagline;
+
+    private int followersCount;
+    private int followingCount;
+
     //deserialise user
     public static User fromJson(JSONObject json) {
         User u = new User();
@@ -51,6 +69,9 @@ public class User extends BaseModel {
             u.uid = json.getLong("id");
             u.screenName = json.getString("screen_name");
             u.profileImageUrl = json.getString("profile_image_url");
+            u.tagline = json.getString("description");
+            u.followersCount = json.getInt("followers_count");
+            u.followingCount = json.getInt("friends_count");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -78,4 +99,6 @@ public class User extends BaseModel {
                 from(User.class).
                 where(User_Table.uid.eq(id)).querySingle();
     }
+
+
 }

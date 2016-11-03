@@ -6,68 +6,64 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.dsatija.apps.twittwit.R;
-import com.dsatija.apps.twittwit.adapter.TweetsArrayAdapter;
-import com.dsatija.apps.twittwit.network.TwitterApplication;
-import com.dsatija.apps.twittwit.network.TwitterClient;
-import com.dsatija.apps.twittwit.listeners.EndlessScrollListener;
+import com.dsatija.apps.twittwit.fragments.HomeTimelineFragment;
+import com.dsatija.apps.twittwit.fragments.MentionsTimelineFragment;
+import com.dsatija.apps.twittwit.fragments.TweetsListFragment;
 import com.dsatija.apps.twittwit.models.Tweet;
-import com.dsatija.apps.twittwit.models.User;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
-
 public class TimelineActivity extends AppCompatActivity {
-    private TwitterClient client;
-    private TweetsArrayAdapter aTweets;
-    private ArrayList<Tweet> tweets;
-    private ListView lvTweets;
+
     private Long minId = Long.MAX_VALUE;
     private Long maxId = 1L;
     private static final int REQUEST_CODE = 10;
     private SharedPreferences prefs;
     private SwipeRefreshLayout swipeContainer;
+    private TweetsListFragment fragmentTweetsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        lvTweets = (ListView) findViewById(R.id.lvTweets);
+
+        //get viewpager
+        ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        //set view pager adapter for pager
+        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        //find sliding tab strip
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        //Attach tab strip to view pager
+        tabStrip.setViewPager(vpPager);
+
 
         prefs = this.getSharedPreferences("com.dsatija.apps.twittwit", Context.MODE_PRIVATE);
-        //construct array list(data source)
-        tweets = new ArrayList<>();
-        //create adapter from data source
-        aTweets = new TweetsArrayAdapter(this, tweets);
-        //connect adapter
-        lvTweets.setAdapter(aTweets);
+
         //get client
-        client = TwitterApplication.getRestClient();
-        saveLoginUserProfileData();
-        populateTimeline(null);
+
+
+       /* saveLoginUserProfileData(); */
+       /* populateTimeline(null);
         // Find the toolbar view inside the activity layout
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
-        setSupportActionBar(toolbar);
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        setSupportActionBar(toolbar);*/
+        /*swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);*/
         // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+       /* swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // Your code to refresh the list here.
@@ -78,7 +74,7 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
         // Configure the refreshing colors
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+       swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
@@ -91,49 +87,22 @@ public class TimelineActivity extends AppCompatActivity {
                 // or loadNextDataFromApi(totalItemsCount);
                 // return true; // ONLY if more data is actually being loaded; false otherwise.
             }
-        });
+        });*/
 
     }
 
-    private void loadNextDataFromApi(int page) {
+   /* private void loadNextDataFromApi(int page) {
         if (aTweets.getCount() == 0) {
             populateTimeline(null);
         } else if (aTweets.getCount() >= TwitterClient.TWEETS_PER_PAGE) {
             Tweet oldest = aTweets.getItem(aTweets.getCount() - 1);
             populateTimeline(oldest.getUid());
         }
-    }
+    }*/
 
     //send api request n fill lit view by creating tweet objects from json
-    private void populateTimeline(Long maxid) {
-        if (!isOnline()) {
-            Snackbar.make(this.getCurrentFocus(), "No internet connection!", Snackbar.LENGTH_LONG)
-                    .setAction("RETRY", null).show();
-            fetchingSavedTweets();
-        } else {
-            client.getHomeTimeline(maxid, new JsonHttpResponseHandler() {
-                //Success
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                    Log.d("Debug", json.toString());
-                    ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
-                    saveTweets(tweets);
-                    aTweets.addAll(tweets);
-
-
-                }
-                //failure
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Log.d("DEBUG", errorResponse.toString());
-                }
-            });
-        }
-    }
-
-    private void refreshTimeline() {
+   /* private void refreshTimeline() {
         if (aTweets.getCount() > 0) {
             minId = aTweets.getItem(aTweets.getCount() - 1).getUid();
             maxId = aTweets.getItem(0).getUid();
@@ -161,13 +130,22 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d("DEBUG", errorResponse.toString());
             }
         });
-    }
+    }*/
+
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.compose_tweet, menu);
+        /*getMenuInflater().inflate(R.menu.compose_tweet, menu);*/
+        getMenuInflater().inflate(R.menu.menu_timeline, menu);
         return true;
+    }
+    public void onProfileView(MenuItem mi){
+        Intent i = new Intent(TimelineActivity.this, ProfileActivity.class);
+        startActivity(i);
     }
 
     public void composeTweet(MenuItem mi) {
@@ -175,7 +153,7 @@ public class TimelineActivity extends AppCompatActivity {
         startActivityForResult(i, REQUEST_CODE);
 
     }
-
+/*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
@@ -192,7 +170,7 @@ public class TimelineActivity extends AppCompatActivity {
                 }
             });
         }
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -207,7 +185,7 @@ public class TimelineActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveLoginUserProfileData() {
+  /*  private void saveLoginUserProfileData() {
         client.getUserProfile(new JsonHttpResponseHandler() {
             public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                 Log.d("json from succes", json.toString());
@@ -223,24 +201,54 @@ public class TimelineActivity extends AppCompatActivity {
 
         });
     }
-
+*/
     private void saveTweets(List<Tweet> newTweets) {
         Tweet.saveAll(newTweets);
     }
 
-    private void fetchingSavedTweets() {
+   /* private void fetchingSavedTweets() {
         List<Tweet> savedTweets = Tweet.findAll();
         if (savedTweets != null || savedTweets.isEmpty()) {
             aTweets.clear();
             aTweets.addAll(savedTweets);
         }
-    }
+    } */
 
     private Boolean isOnline() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    //return oreder of fragments in view pager
+    public class TweetsPagerAdapter extends FragmentPagerAdapter {
+
+        private String tabTitles[] = {"Home","Mentions"};
+        public TweetsPagerAdapter(FragmentManager fm){
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return new HomeTimelineFragment();
+            } else if (position == 1) {
+                return new MentionsTimelineFragment();
+            }else
+                return null;
+        }
+
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length ;
+        }
     }
 
 }
