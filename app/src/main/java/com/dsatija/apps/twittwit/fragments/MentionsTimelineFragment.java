@@ -18,39 +18,48 @@ import cz.msebera.android.httpclient.Header;
 public class MentionsTimelineFragment extends TweetsListFragment {
     private TwitterClient client;
 
+    private long previousOffSet=0;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
-        populateTimeline(null);
+        populateTimeline(0);
     }
 
-    private void populateTimeline(Long maxid) {
-        /*if (!isOnline()) {
-            Snackbar.make(this.getCurrentFocus(), "No internet connection!", Snackbar.LENGTH_LONG)
-                    .setAction("RETRY", null).show();
-            fetchingSavedTweets();
-        } else {*/
-        client.getMentionsTimeline(new JsonHttpResponseHandler() {
-            //Success
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                Log.d("Debug", json.toString());
-                ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
+    protected void populateTimeline(long offset) {
+
+
+
+
+            client.getMentionsTimeline(offset, new JsonHttpResponseHandler() {
+                //Success
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+
+                    Log.d("Debug", json.toString());
+                    ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
+                    Tweet tweet=tweets.get(tweets.size()-1);
+                    previousOffSet=tweet.getUid();
                 /*saveTweets(tweets);*/
                    /* aTweets.addAll(tweets);*/
-                addAll(tweets);
+                    Log.d("tweet size", String.valueOf(tweets.size()));
+                    addAll(tweets);
 
 
-            }
-            //failure
+                }
+                //failure
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.d("DEBUG", errorResponse.toString());
+                }
+            });
+
+        previousOffSet=offset;
+
     }
 
 

@@ -8,4 +8,18 @@
           android:title="Profile"
           android:onClick="onProfileView"  />
 
+    <item
+        android:id="@+id/aiCompose"
+        android:icon="@drawable/compose2"
+
+
+        android:orderInCategory="100"
+
+        app:showAsAction="ifRoom"
+        android:title="@string/compose"
+        android:onClick="composeTweet"/>
+
+
 </menu>
+
+

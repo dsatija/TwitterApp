@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.dsatija.apps.twittwit.models.Tweet;
+import com.dsatija.apps.twittwit.network.NetworkConnectivity;
 import com.dsatija.apps.twittwit.network.TwitterApplication;
 import com.dsatija.apps.twittwit.network.TwitterClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -17,13 +18,15 @@ import cz.msebera.android.httpclient.Header;
 
 //loading user stream
 public class UserTimelineFragment extends  TweetsListFragment{
+    private static String screen_name;
     private TwitterClient client;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
-        populateTimeline(null);
+        populateTimeline((long)0);
     }
 
     public static UserTimelineFragment newInstance(String screen_name) {
@@ -34,15 +37,17 @@ public class UserTimelineFragment extends  TweetsListFragment{
         return userfragment;
     }
 
-    private void populateTimeline(Long maxid) {
-        String screenName = getArguments().getString("screen_name");
+
+    @Override
+    protected void populateTimeline(long offset) {
+        screen_name = getArguments().getString("screen_name");
 
         /*if (!isOnline()) {
             Snackbar.make(this.getCurrentFocus(), "No internet connection!", Snackbar.LENGTH_LONG)
                     .setAction("RETRY", null).show();
             fetchingSavedTweets();
         } else {*/
-        client.getUserTimeline(screenName,new JsonHttpResponseHandler() {
+        client.getUserTimeline(screen_name,new JsonHttpResponseHandler() {
             //Success
 
             @Override
@@ -66,4 +71,19 @@ public class UserTimelineFragment extends  TweetsListFragment{
 
 
 
+    protected void initialOrRefreshPopulateTimeline(long page) {
+
+       // clear();
+
+        if (NetworkConnectivity.isNetworkAvailable(getContext()) != true) {
+            addAll(Tweet.findAll());
+            return;
+        }
+
+        populateTimeline(page);
+    }
 }
+
+
+
+

@@ -10,11 +10,13 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Disha on 10/20/2016.
  */
 @Table(database = MyDatabase.class)
-public class User extends BaseModel {
+public class User extends BaseModel implements Serializable {
     //attributes
 
     public void setUid(long uid) {
@@ -72,6 +74,7 @@ public class User extends BaseModel {
             u.tagline = json.getString("description");
             u.followersCount = json.getInt("followers_count");
             u.followingCount = json.getInt("friends_count");
+            u.save();
         } catch (JSONException e) {
             e.printStackTrace();
         }

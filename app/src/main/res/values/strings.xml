@@ -20,5 +20,6 @@
     <string name="retweet">retweet</string>
     <string name="favorite">favorite</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>

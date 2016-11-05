@@ -162,4 +162,6 @@ public class Tweet extends BaseModel {
         return SQLite.select().
                 from(Tweet.class).queryList();
     }
+
+
 }

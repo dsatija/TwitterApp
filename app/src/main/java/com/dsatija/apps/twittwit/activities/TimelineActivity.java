@@ -1,29 +1,38 @@
 package com.dsatija.apps.twittwit.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.dsatija.apps.twittwit.R;
+import com.dsatija.apps.twittwit.adapter.SmartFragmentStatePagerAdapter.SmartFragmentStatePagerAdapter;
 import com.dsatija.apps.twittwit.fragments.HomeTimelineFragment;
 import com.dsatija.apps.twittwit.fragments.MentionsTimelineFragment;
 import com.dsatija.apps.twittwit.fragments.TweetsListFragment;
+import com.dsatija.apps.twittwit.models.Session;
 import com.dsatija.apps.twittwit.models.Tweet;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.dsatija.apps.twittwit.models.User;
+import com.dsatija.apps.twittwit.network.NetworkConnectivity;
+import com.dsatija.apps.twittwit.network.TwitterApplication;
+import com.dsatija.apps.twittwit.network.TwitterClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONObject;
 
 import java.util.List;
+
+import cz.msebera.android.httpclient.Header;
 
 public class TimelineActivity extends AppCompatActivity {
 
@@ -33,25 +42,112 @@ public class TimelineActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private SwipeRefreshLayout swipeContainer;
     private TweetsListFragment fragmentTweetsList;
+    private Session session;
+    private User currentUser;
+    private TwitterClient client;
+    TweetsPagerAdapter adapterViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-
+        client = TwitterApplication.getRestClient();
+        prefs=PreferenceManager.getDefaultSharedPreferences(this);
+        populateCurrentUser();
+        saveLoginUserProfileData();
         //get viewpager
         ViewPager vpPager = (ViewPager) findViewById(R.id.viewpager);
+        adapterViewPager=new TweetsPagerAdapter(getSupportFragmentManager());
         //set view pager adapter for pager
-        vpPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        vpPager.setAdapter(adapterViewPager);
         //find sliding tab strip
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         //Attach tab strip to view pager
         tabStrip.setViewPager(vpPager);
 
+        session = new Session();
 
-        prefs = this.getSharedPreferences("com.dsatija.apps.twittwit", Context.MODE_PRIVATE);
+    }
 
-        //get client
+    private void saveLoginUserProfileData() {
+        client.getUserInfo(new JsonHttpResponseHandler() {
+            public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
+                Log.d("json from success", json.toString());
+                User user = User.fromJson(json);
+                prefs.edit().putLong("userId", user.getUid()).commit();
+                user.save();
+            }
+
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+
+        });
+
+    }
+
+    private void populateCurrentUser() {
+
+
+      //  prefs = this.getSharedPreferences("com.dsatija.apps.twittwit", Context.MODE_PRIVATE);
+
+        if (!NetworkConnectivity.isNetworkAvailable(this)) {
+            // grab current user from Shared Prefs, if there is one
+
+
+            Long userId = prefs.getLong("user_id", Long.parseLong(""));
+            if (!userId.equals(null)) {
+                long uId = userId;
+                currentUser = User.findById(uId);
+                if (currentUser != null) {
+                    session.setCurrentUser(currentUser);
+                } else {
+                    logOut();
+                }
+                return;
+            }
+            return; // exit if null, we should not call this endpoint if user isn't online
+        }
+
+
+    client.getUserInfo(new JsonHttpResponseHandler() {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            // create a user
+            currentUser = User.fromJson(response);
+            // set a current user
+            session.setCurrentUser(currentUser);
+            // only make the second request if that use isn't stored locally
+            if (session.getCurrentUser() != null) {
+                // set shared preferences
+                // this should be happening each time!!
+                SharedPreferences pref =
+                        PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                SharedPreferences.Editor edit = pref.edit();
+                edit.putLong("user_id", (session.getCurrentUser().getUid()));
+                edit.commit();
+            }
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+            if (errorResponse != null) {
+                Log.d("DEBUG", errorResponse.toString());
+            } else {
+                Log.d("DEBUG", "null error");
+            }
+        }
+    });
+}
+
+    private void logOut() {
+
+        Toast.makeText(this,
+                "we should be logging you out since there is no user session",
+                Toast.LENGTH_LONG).show();
+    }
+
+    //get client
 
 
        /* saveLoginUserProfileData(); */
@@ -89,7 +185,7 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });*/
 
-    }
+
 
    /* private void loadNextDataFromApi(int page) {
         if (aTweets.getCount() == 0) {
@@ -144,8 +240,9 @@ public class TimelineActivity extends AppCompatActivity {
         return true;
     }
     public void onProfileView(MenuItem mi){
-        Intent i = new Intent(TimelineActivity.this, ProfileActivity.class);
-        startActivity(i);
+        Intent intent = new Intent(TimelineActivity.this, ProfileActivity.class);
+        intent.putExtra("user", session.getCurrentUser());
+        startActivity(intent);
     }
 
     public void composeTweet(MenuItem mi) {
@@ -153,15 +250,16 @@ public class TimelineActivity extends AppCompatActivity {
         startActivityForResult(i, REQUEST_CODE);
 
     }
-/*
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            String tweetStr = data.getExtras().getString("tweet");
+            final String tweetStr = data.getExtras().getString("tweet");
             client.postTweet(tweetStr, new JsonHttpResponseHandler() {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject json) {
                     Tweet tweet = Tweet.fromJson(json);
-                    aTweets.insert(tweet, 0);
+                    HomeTimelineFragment homeTimelineFragment= (HomeTimelineFragment) adapterViewPager.getRegisteredFragment(0);
+                    homeTimelineFragment.insert(tweet,0);
                 }
 
                 @Override
@@ -170,7 +268,7 @@ public class TimelineActivity extends AppCompatActivity {
                 }
             });
         }
-    }*/
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -214,15 +312,9 @@ public class TimelineActivity extends AppCompatActivity {
         }
     } */
 
-    private Boolean isOnline() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) this.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-    }
 
     //return oreder of fragments in view pager
-    public class TweetsPagerAdapter extends FragmentPagerAdapter {
+    public class TweetsPagerAdapter extends SmartFragmentStatePagerAdapter {
 
         private String tabTitles[] = {"Home","Mentions"};
         public TweetsPagerAdapter(FragmentManager fm){
