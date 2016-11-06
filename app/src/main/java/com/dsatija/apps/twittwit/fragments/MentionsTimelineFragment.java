@@ -31,7 +31,7 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     protected void populateTimeline(long offset) {
 
 
-
+showProgressBar();
 
             client.getMentionsTimeline(offset, new JsonHttpResponseHandler() {
                 //Success
@@ -48,6 +48,7 @@ public class MentionsTimelineFragment extends TweetsListFragment {
                     Log.d("tweet size", String.valueOf(tweets.size()));
                     addAll(tweets);
 
+                    hideProgressBar();
 
                 }
                 //failure

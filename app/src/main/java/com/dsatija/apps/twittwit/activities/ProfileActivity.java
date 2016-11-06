@@ -56,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setUserInfo() {
 
-        user = (User)getIntent().getSerializableExtra("user");
+        user = (User)getIntent().getParcelableExtra("user");
 
         if (user == null && !NetworkConnectivity.isNetworkAvailable(this)) {
             Toast.makeText(this, "you are offline, we can't access your user data", Toast.LENGTH_LONG).show();

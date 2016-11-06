@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.dsatija.apps.twittwit.R;
-import com.dsatija.apps.twittwit.adapter.SmartFragmentStatePagerAdapter.SmartFragmentStatePagerAdapter;
+import com.dsatija.apps.twittwit.adapter.SmartFragmentStatePagerAdapter;
 import com.dsatija.apps.twittwit.fragments.HomeTimelineFragment;
 import com.dsatija.apps.twittwit.fragments.MentionsTimelineFragment;
 import com.dsatija.apps.twittwit.fragments.TweetsListFragment;

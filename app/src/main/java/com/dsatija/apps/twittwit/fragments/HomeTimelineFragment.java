@@ -33,10 +33,12 @@ public class HomeTimelineFragment extends TweetsListFragment {
             return;
         }
 
+        showProgressBar();
         client.getHomeTimeline(offset, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONArray jsonResponse) {
                         addAll(Tweet.fromJSONArray(jsonResponse));
+                        hideProgressBar();
                     }
 
                     @Override

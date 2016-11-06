@@ -1,4 +1,4 @@
-package com.dsatija.apps.twittwit.adapter.SmartFragmentStatePagerAdapter;
+package com.dsatija.apps.twittwit.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

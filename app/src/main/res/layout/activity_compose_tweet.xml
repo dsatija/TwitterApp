@@ -7,7 +7,7 @@
                 android:background="@color/white"
                 android:id="@+id/est">
 
-    <android.support.v7.widget.Toolbar
+   <!-- <android.support.v7.widget.Toolbar
         android:id="@+id/composetoolbar"
         android:minHeight="?attr/actionBarSize"
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
         android:contentDescription="birdlogo"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/composetoolbar"
-        android:layout_alignStart="@+id/composetoolbar"/>
+        android:layout_alignStart="@+id/composetoolbar"/>-->
 
     <ImageView
         android:id="@+id/ivComposeProfileImage"
@@ -38,10 +38,10 @@
         android:layout_marginLeft="15dp"
         android:contentDescription="@string/profile_image"
         android:layout_marginTop="20dp"
-        android:src="@drawable/ic_launcher"
-        android:layout_below="@+id/composetoolbar"
+        android:src="@drawable/ic_launcher"/>
+       <!-- android:layout_below="@+id/composetoolbar"
         android:layout_alignLeft="@+id/composetoolbar"
-        android:layout_alignStart="@+id/composetoolbar"/>
+        android:layout_alignStart="@+id/composetoolbar" -->
 
 
     <TextView

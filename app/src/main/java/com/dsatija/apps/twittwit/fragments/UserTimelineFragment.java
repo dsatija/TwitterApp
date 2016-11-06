@@ -2,6 +2,7 @@ package com.dsatija.apps.twittwit.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ProgressBar;
 
 import com.dsatija.apps.twittwit.models.Tweet;
 import com.dsatija.apps.twittwit.network.NetworkConnectivity;
@@ -20,6 +21,8 @@ import cz.msebera.android.httpclient.Header;
 public class UserTimelineFragment extends  TweetsListFragment{
     private static String screen_name;
     private TwitterClient client;
+    private ProgressBar progressBarFooter;
+
 
 
     @Override
@@ -47,6 +50,7 @@ public class UserTimelineFragment extends  TweetsListFragment{
                     .setAction("RETRY", null).show();
             fetchingSavedTweets();
         } else {*/
+        showProgressBar();
         client.getUserTimeline(screen_name,new JsonHttpResponseHandler() {
             //Success
 
@@ -57,6 +61,7 @@ public class UserTimelineFragment extends  TweetsListFragment{
                 /*saveTweets(tweets);*/
                    /* aTweets.addAll(tweets);*/
                 addAll(tweets);
+                hideProgressBar();
 
 
             }
@@ -82,6 +87,9 @@ public class UserTimelineFragment extends  TweetsListFragment{
 
         populateTimeline(page);
     }
+
+
+
 }
 
 
