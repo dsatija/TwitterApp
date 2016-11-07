@@ -1,5 +1,8 @@
 package com.dsatija.apps.twittwit.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.dsatija.apps.twittwit.dao.MyDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -14,7 +17,10 @@ import org.json.JSONObject;
  * Created by Disha on 10/20/2016.
  */
 @Table(database = MyDatabase.class)
-public class User extends BaseModel {
+public class User extends BaseModel implements Parcelable {
+    public User() {
+
+    }
     //attributes
 
     public void setUid(long uid) {
@@ -43,6 +49,25 @@ public class User extends BaseModel {
     @Column
     private String profileImageUrl;
 
+
+    public String getTagLine() {
+        return tagline;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public int getFriendsCount() {
+        return followingCount;
+    }
+
+    private String tagline;
+
+    private int followersCount;
+    private int followingCount;
+    private int favCount;
+
     //deserialise user
     public static User fromJson(JSONObject json) {
         User u = new User();
@@ -51,6 +76,14 @@ public class User extends BaseModel {
             u.uid = json.getLong("id");
             u.screenName = json.getString("screen_name");
             u.profileImageUrl = json.getString("profile_image_url");
+            u.tagline = json.getString("description");
+            u.followersCount = json.getInt("followers_count");
+            u.followingCount = json.getInt("friends_count");
+
+            u.favCount = json.getInt("favourites_count");
+
+
+            u.save();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -73,9 +106,60 @@ public class User extends BaseModel {
         return profileImageUrl;
     }
 
+
+    public int getFavCount() {
+        return favCount;
+    }
+
+    public void setFavCount(int favCount) {
+        this.favCount = favCount;
+    }
+
     public static User findById(Long id) {
         return SQLite.select().
                 from(User.class).
                 where(User_Table.uid.eq(id)).querySingle();
     }
+
+
+    protected User(Parcel in) {
+        name = in.readString();
+        uid = in.readLong();
+        screenName = in.readString();
+        profileImageUrl = in.readString();
+        tagline = in.readString();
+        followersCount = in.readInt();
+        followingCount = in.readInt();
+        favCount = in.readInt();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeLong(uid);
+        dest.writeString(screenName);
+        dest.writeString(profileImageUrl);
+        dest.writeString(tagline);
+        dest.writeInt(followersCount);
+        dest.writeInt(followingCount);
+        dest.writeInt(favCount);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,9 +17,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.dsatija.apps.twittwit.R;
+import com.dsatija.apps.twittwit.models.User;
 import com.dsatija.apps.twittwit.network.TwitterApplication;
 import com.dsatija.apps.twittwit.network.TwitterClient;
-import com.dsatija.apps.twittwit.models.User;
 
 public class ComposeTweetActivity extends AppCompatActivity {
     private SharedPreferences prefs;
@@ -36,11 +35,18 @@ public class ComposeTweetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose_tweet);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.composetoolbar);
-        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setTitle("Compose");
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_twit);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         prefs = this.getSharedPreferences("com.dsatija.apps.twittwit", Context.MODE_PRIVATE);
         client = TwitterApplication.getRestClient();
         setupviews();
+
         setupHandlers();
         loadLoginUserData();
     }

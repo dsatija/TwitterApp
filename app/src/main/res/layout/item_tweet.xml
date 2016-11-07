@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5dp">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp">
+
 
     <ImageView
         android:id="@+id/ivProfileImage"
@@ -12,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:contentDescription="profile_image"
         android:padding="5dp"
-        android:src="@drawable/ic_launcher"/>
+        android:src="@drawable/ic_launcher" />
 
     <TextView
         android:id="@+id/tvScreenName"
@@ -22,7 +23,7 @@
         android:layout_toRightOf="@+id/ivProfileImage"
         android:paddingLeft="5dp"
         android:text="Foo"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvUserName"
@@ -33,7 +34,7 @@
         android:layout_toRightOf="@+id/tvScreenName"
         android:paddingLeft="5dp"
         android:text="\@foo"
-        android:textColor="#909090"/>
+        android:textColor="#909090" />
 
     <TextView
         android:id="@+id/tvBody"
@@ -44,7 +45,7 @@
         android:autoLink="all"
         android:linksClickable="true"
         android:padding="5dp"
-        android:text="Tweet Body"/>
+        android:text="Tweet Body" />
 
     <TextView
         android:id="@+id/tvTimeStamp"
@@ -57,7 +58,7 @@
         android:gravity="right"
         android:paddingRight="10dp"
         android:text="@string/time"
-        android:textColor="#909090"/>
+        android:textColor="#909090" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -69,30 +70,57 @@
 
         <ImageView
             android:id="@+id/ivReply"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:layout_marginRight="30dp"
+            android:layout_below="@+id/tvBody"
+            android:layout_alignLeft="@+id/tvBody"
+            android:layout_alignStart="@+id/tvBody"
             android:contentDescription="@string/reply"
             android:layout_weight="1"
-            android:src="@drawable/ic_reply"/>
+            android:src="@drawable/ic_reply" />
 
-        <ImageView
-            android:id="@+id/ivRetweet"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:contentDescription="@string/retweet"
-            android:layout_weight="1"
+        <!-- <ImageView
+             android:id="@+id/ivRetweet"
+             android:layout_width="20dp"
+             android:layout_height="20dp"
+             android:contentDescription="@string/retweet"
+             android:layout_weight="1"
 
-            android:src="@drawable/ic_retweet"/>
+             android:src="@drawable/ic_retweet"/> -->
+
         <!-- android:onClick="onRetweet" -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvRetweetCount"
+            android:layout_below="@+id/tvBody"
+            android:drawablePadding="10dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
+
+            />
 
         <ImageView
             android:id="@+id/ivFavorite"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/favorite"
-            android:layout_weight="1"
+            android:layout_weight="1" />
 
-            android:src="@drawable/ic_favorite"/>
+        <!--android:src="@drawable/ic_favorite"-->
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvFavCount"
+            android:layout_below="@+id/tvBody"
+            android:layout_toRightOf="@+id/ivFav"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true" />
     </LinearLayout>
 
 </RelativeLayout>
