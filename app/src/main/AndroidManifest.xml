@@ -20,7 +20,7 @@
         android:name=".network.TwitterApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_twit"
-        android:label="Timeline"
+        android:label="Twittwit"
         android:theme="@style/AppTheme">
 
         <!--  -->

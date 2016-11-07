@@ -3,6 +3,7 @@ package com.dsatija.apps.twittwit.network;
 import android.content.Context;
 
 import com.codepath.oauth.OAuthBaseClient;
+import com.dsatija.apps.twittwit.utilities.TwitterConstants;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -37,16 +38,17 @@ public class TwitterClient extends OAuthBaseClient {
 
     //Home Timeline
 
-    public void getHomeTimeline(long max_id,AsyncHttpResponseHandler handler) {
+    public void getHomeTimeline(int refType, long max_id, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         //specify params
         RequestParams params = new RequestParams();
         params.put("count", TWEETS_PER_PAGE);
-        params.put("since_id", 1);
-        if (max_id > 1) { // for consecutive calls to this endpoint
-            params.put("max_id", max_id); // would we want this to update based on the last id we got?
+        if (refType == TwitterConstants.SCROLL) {
+            //get the 25 tweets before current earliest
+            params.put("max_id", max_id);// offset: earliest -1
+        } else {
+            params.put("since_id", 1);// get the most recent 25
         }
-
         params.put("include_my_retweet", true);
         //execute
         getClient().get(apiUrl, params, handler);
@@ -63,31 +65,44 @@ public class TwitterClient extends OAuthBaseClient {
     }
 
 
-    public void getMentionsTimeline(long max_id,AsyncHttpResponseHandler handler) {
+    public void getMentionsTimeline(int refType, long max_id, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/mentions_timeline.json");
         RequestParams params = new RequestParams();
-        params.put("count",25);
+        params.put("count", TWEETS_PER_PAGE);
+        if (refType == TwitterConstants.SCROLL) {
+
+            params.put("max_id", max_id);
+        } else {
+            params.put("since_id", 1);// get the most recent 25
+        }
         params.put("include_my_retweet", true);
 
-        getClient().get(apiUrl,params,handler);
+        getClient().get(apiUrl, params, handler);
     }
-    public void getUserTimeline(String screenName,AsyncHttpResponseHandler handler){
+
+    public void getUserTimeline(String screenName, int refType, long max_id, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("statuses/user_timeline.json");
         RequestParams params = new RequestParams();
-        params.put("count",25);
-        params.put("screen_name",screenName);
+        params.put("count", 25);
+        if (refType == TwitterConstants.SCROLL) {
+            params.put("max_id", max_id);
+        } else {
+
+            params.put("since_id", 1);
+        }
         params.put("include_my_retweet", true);
+        params.put("screen_name", screenName);
 
 
-        getClient().get(apiUrl,params,handler);
+        getClient().get(apiUrl, params, handler);
     }
 
 
-    public void getUserInfo(AsyncHttpResponseHandler handler){
+    public void getUserInfo(AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("account/verify_credentials.json");
         RequestParams params = new RequestParams();
-        params.put("count",25);
-        getClient().get(apiUrl,params,handler);
+        params.put("count", 25);
+        getClient().get(apiUrl, params, handler);
     }
 
     public void showTweet(long tweetId, AsyncHttpResponseHandler handler) {
@@ -97,7 +112,7 @@ public class TwitterClient extends OAuthBaseClient {
         getClient().get(apiUrl, params, handler);
     }
 
-    public void removeFavorite(long tweetID, AsyncHttpResponseHandler    handler) {
+    public void removeFavorite(long tweetID, AsyncHttpResponseHandler handler) {
 
         String apiUrl = getApiUrl("favorites/destroy.json");
         // Can specify query string params directly or through RequestParams.
@@ -121,11 +136,7 @@ public class TwitterClient extends OAuthBaseClient {
     public void retweet(long originalTweetID, AsyncHttpResponseHandler handler) {
 
         String apiUrl = getApiUrl("statuses/retweet/" + originalTweetID + ".json");
-        // Can specify query string params directly or through RequestParams.
         RequestParams params = new RequestParams();
-        //params.put("include_my_retweet", true);/////
-
-        //Execute the request
         getClient().post(apiUrl, params, handler);
     }
 

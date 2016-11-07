@@ -12,6 +12,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 /**
  * Created by Disha on 10/20/2016.
  */
@@ -119,7 +120,6 @@ public class User extends BaseModel implements Parcelable {
                 from(User.class).
                 where(User_Table.uid.eq(id)).querySingle();
     }
-
 
 
     protected User(Parcel in) {

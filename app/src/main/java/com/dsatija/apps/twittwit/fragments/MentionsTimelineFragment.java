@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.dsatija.apps.twittwit.models.Tweet;
+import com.dsatija.apps.twittwit.models.User;
 import com.dsatija.apps.twittwit.network.TwitterApplication;
 import com.dsatija.apps.twittwit.network.TwitterClient;
+import com.dsatija.apps.twittwit.utilities.TwitterConstants;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.raizlabs.android.dbflow.sql.language.Delete;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,48 +21,56 @@ import cz.msebera.android.httpclient.Header;
 public class MentionsTimelineFragment extends TweetsListFragment {
     private TwitterClient client;
 
-    private long previousOffSet=0;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
-        populateTimeline(0);
+        populateTimeline(TwitterConstants.NEW_PAGE, 1);
     }
 
 
-    protected void populateTimeline(long offset) {
+    protected void populateTimeline(int refType, long offset) {
 
 
-showProgressBar();
+        final int refreshType = refType;
+        showProgressBar();
 
-            client.getMentionsTimeline(offset, new JsonHttpResponseHandler() {
-                //Success
+        client.getMentionsTimeline(refreshType, offset, new JsonHttpResponseHandler() {
+            //Success
 
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
 
-                    Log.d("Debug", json.toString());
-                    ArrayList<Tweet> tweets = Tweet.fromJSONArray(json);
-                    Tweet tweet=tweets.get(tweets.size()-1);
-                    previousOffSet=tweet.getUid();
-                /*saveTweets(tweets);*/
-                   /* aTweets.addAll(tweets);*/
-                    Log.d("tweet size", String.valueOf(tweets.size()));
-                    addAll(tweets);
+                hideProgressBar();
 
-                    hideProgressBar();
-
+                if (refreshType == TwitterConstants.SWIPE) {
+                    // Now we call setRefreshing(false) to signal refresh has finished
+                    swipeContainer.setRefreshing(false);
                 }
-                //failure
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Log.d("DEBUG", errorResponse.toString());
+                if (refreshType != TwitterConstants.SCROLL) {
+                    //clear adapter
+                    getAdapter().clear();
+                    //clear dbs
+                    new Delete().from(Tweet.class).execute();
+                    new Delete().from(User.class).execute();
                 }
-            });
 
-        previousOffSet=offset;
+                ArrayList<Tweet> temps = Tweet.fromJSONArray(json);
+                if (temps.size() > 0) {
+                    earliestID = temps.get(temps.size() - 1).getUid();
+                    getAdapter().addAll(temps);
+                }
+                Log.d("DEBUG adapter", getAdapter().toString());
+
+            }
+            //failure
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+            }
+        });
 
     }
 

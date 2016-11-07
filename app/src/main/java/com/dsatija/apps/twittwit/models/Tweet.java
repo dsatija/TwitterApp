@@ -33,7 +33,7 @@ import java.util.Locale;
  */
 //parse json + encapsulate logic
 @Table(database = MyDatabase.class)
-public class Tweet extends BaseModel implements  Parcelable {
+public class Tweet extends BaseModel implements Parcelable {
     public Tweet() {
 
     }
@@ -115,7 +115,7 @@ public class Tweet extends BaseModel implements  Parcelable {
     }
 
     @Column
-    @ForeignKey(onDelete = ForeignKeyAction.CASCADE,onUpdate = ForeignKeyAction.CASCADE)
+    @ForeignKey(onDelete = ForeignKeyAction.CASCADE, onUpdate = ForeignKeyAction.CASCADE)
 
     private User retweetingUser = null;
 
@@ -159,10 +159,10 @@ public class Tweet extends BaseModel implements  Parcelable {
 
             if (!tweet.isRetweet()) {
 
-                if (jsonObject.optString("in_reply_to_status_id") != null && !jsonObject.optString("in_reply_to_status_id").equals("null") ) {
+                if (jsonObject.optString("in_reply_to_status_id") != null && !jsonObject.optString("in_reply_to_status_id").equals("null")) {
                     tweet.inReplyToStatusID = jsonObject.getLong("in_reply_to_status_id");
                 }
-                if (jsonObject.optString("in_reply_to_user_id") != null && !jsonObject.optString("in_reply_to_user_id").equals("null") ) {
+                if (jsonObject.optString("in_reply_to_user_id") != null && !jsonObject.optString("in_reply_to_user_id").equals("null")) {
                     tweet.inReplyToUserID = jsonObject.getLong("in_reply_to_user_id");
                 }
                 if (jsonObject.optString("in_reply_to_screen_name") != null && !jsonObject.optString("in_reply_to_screen_name").equals("null")) {
@@ -339,10 +339,10 @@ public class Tweet extends BaseModel implements  Parcelable {
     }
 
 
-
     protected Tweet(Parcel in) {
         body = in.readString();
         uid = in.readLong();
+        this.user = in.readParcelable(User.class.getClassLoader());
         createdAt = in.readString();
         retweetCount = in.readInt();
         favCount = in.readInt();
@@ -352,6 +352,7 @@ public class Tweet extends BaseModel implements  Parcelable {
         inReplyToUserID = in.readLong();
         isRetweet = in.readByte() != 0x00;
         current_user_retweet_id_str = in.readString();
+        //this.retweetingUser = in.readParcelable(User.class.getClassLoader());
         id_str_x = in.readString();
         inReplyToScreenName = in.readString();
     }
@@ -365,6 +366,7 @@ public class Tweet extends BaseModel implements  Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(body);
         dest.writeLong(uid);
+        dest.writeParcelable(this.user, 0);
         dest.writeString(createdAt);
         dest.writeInt(retweetCount);
         dest.writeInt(favCount);
@@ -375,6 +377,7 @@ public class Tweet extends BaseModel implements  Parcelable {
         dest.writeByte((byte) (isRetweet ? 0x01 : 0x00));
         dest.writeString(current_user_retweet_id_str);
         dest.writeString(id_str_x);
+        //dest.writeParcelable(this.retweetingUser, 0);
         dest.writeString(inReplyToScreenName);
     }
 

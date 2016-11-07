@@ -28,25 +28,29 @@ public class TweetDisplayActivity extends AppCompatActivity {
     //  private TextView tvDetailDesc;
     private TextView tvDetailDate;
     private Tweet tweet;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tweet_display);
 
+
         tweet = (Tweet) getIntent().getParcelableExtra("tweet_selected");
 
-        getSupportActionBar().setTitle("Home");
+        getSupportActionBar().setTitle("Twittwit");
         //getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources()
         //        .getColor(R.color.blue)));
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_launcher);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
 
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_twit);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ivDetailProfileImage = (ImageView) findViewById(R.id.ivDetailProfileImage);
         tvDetailName = (TextView) findViewById(R.id.tvDetailName);
-       tvDetailBody = (TextView) findViewById(R.id.tvDetailBody);
+        tvDetailBody = (TextView) findViewById(R.id.tvDetailBody);
         tvDetailUserName = (TextView) findViewById(R.id.tvDetailUserName);
         tvDetailDate = (TextView) findViewById(R.id.tvDetailDate);
+
         // tvDetailDesc = (TextView) findViewById(R.id.tvDetailDesc);
 
         getDetails();
@@ -54,22 +58,24 @@ public class TweetDisplayActivity extends AppCompatActivity {
 
     }
 
-    private void getDetails(){
+    private void getDetails() {
 
         TwitterApplication.getRestClient().showTweet(tweet.getUid(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 // ...the data has come back, add new items to your adapter...
                 tvDetailUserName.setText("@" + tweet.getUser().getScreenName());
-                tvDetailDate.setText(tweet.getCreatedAt());
+                tvDetailDate.setText(tweet.getRelativeTimeAgo());
                 tvDetailName.setText(tweet.getUser().getName());
+
+
                 try {
                     // tvDetailDesc.setText(response.getString("description"));
                     tvDetailBody.setText(response.getString("text"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                };
+                }
                 Glide.with(getBaseContext()).load(tweet.getUser().getProfileImageUrl()).into(ivDetailProfileImage);
             }
 

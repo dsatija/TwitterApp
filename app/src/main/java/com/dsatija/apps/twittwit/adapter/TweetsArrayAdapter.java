@@ -26,7 +26,6 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     Tweet tweet;
 
 
-
     private TAFragmentListener fragmentListener;
 
     private static class ViewHolder {
@@ -40,9 +39,10 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
 
     }
+
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context, 0, tweets);
-        this.fragmentListener=null;
+        this.fragmentListener = null;
     }
 
     @Override
@@ -55,19 +55,18 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(com.dsatija.apps.twittwit.R.layout.item_tweet, parent, false);
-            viewHolder.ivProfileImage=(ImageView) convertView.findViewById(com.dsatija.apps.twittwit.R.id.ivProfileImage);
-            viewHolder.tvUserName=(TextView) convertView.findViewById(R.id.tvUserName);
-            viewHolder.tvBody =(TextView) convertView.findViewById(R.id.tvBody);
-            viewHolder.tvScreenName=(TextView) convertView.findViewById(R.id.tvScreenName);
-            viewHolder.tvTimeStamp=(TextView) convertView.findViewById(R.id.tvTimeStamp);
+            viewHolder.ivProfileImage = (ImageView) convertView.findViewById(com.dsatija.apps.twittwit.R.id.ivProfileImage);
+            viewHolder.tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
+            viewHolder.tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+            viewHolder.tvScreenName = (TextView) convertView.findViewById(R.id.tvScreenName);
+            viewHolder.tvTimeStamp = (TextView) convertView.findViewById(R.id.tvTimeStamp);
             viewHolder.tvRetweetCount = (TextView) convertView.findViewById(R.id.tvRetweetCount);
             viewHolder.tvFavCount = (TextView) convertView.findViewById(R.id.tvFavCount);
 
             convertView.setTag(viewHolder);
 
 
-        }
-        else{
+        } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
@@ -95,18 +94,19 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         }
         viewHolder.tvFavCount.setText(String.valueOf(tweet.getFavCount()));
 
-               viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
-                   @Override
-                        public void onClick(View v) {
-                                       v.setTag(tweet.getUser());
-                               Intent i = new Intent(getContext(), ProfileActivity.class);
-                             i.putExtra("user", (tweet.getUser()));
-                       getContext().startActivity(i);
-                          }
-                    });
+        viewHolder.ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setTag(tweet.getUser());
+                Intent i = new Intent(getContext(), ProfileActivity.class);
+                i.putExtra("user", (tweet.getUser()));
+                getContext().startActivity(i);
+            }
+        });
 
         viewHolder.tvScreenName.setOnClickListener(new View.OnClickListener() {
             Tweet s = getItem(position);
+
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), TweetDisplayActivity.class);
@@ -128,28 +128,31 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             @Override
             public void onClick(View v) {
                 Log.d("DEBUG", "Clicked to retweet");
-                if(fragmentListener!=null){
+                if (fragmentListener != null) {
                     fragmentListener.onClickToRetweet(position);
                 }
             }
         });
     }
+
     private void setUpFavoriteButtonListener(ViewHolder viewHolder, final int position) {
         viewHolder.tvFavCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("DEBUG", "Clicked to star icon");
-                if(fragmentListener!=null){
+                if (fragmentListener != null) {
                     fragmentListener.onClickToFavorite(position);
                 }
             }
         });
     }
 
-    public interface TAFragmentListener{
+    public interface TAFragmentListener {
         public void onClickToFavorite(int position);
+
         public void onClickToRetweet(int position);
     }
+
     public void setFragmentListener(TAFragmentListener fragmentListener) {
         this.fragmentListener = fragmentListener;
     }

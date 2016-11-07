@@ -2,7 +2,6 @@ package com.dsatija.apps.twittwit.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -25,7 +24,7 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 public class ProfileActivity extends AppCompatActivity {
-    TwitterClient client ;
+    TwitterClient client;
     User user;
 
     @Override
@@ -33,15 +32,14 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_launcher);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_twit);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         setUserInfo();
 
-
-                //populateProfileHeader(user);
-             //get screen name
-        //String screenName = getIntent().getStringExtra("screen_name");
         if (savedInstanceState == null) {
             //create user timeline fragment
             UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(user.getScreenName());
@@ -56,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setUserInfo() {
 
-        user = (User)getIntent().getParcelableExtra("user");
+        user = (User) getIntent().getParcelableExtra("user");
 
         if (user == null && !NetworkConnectivity.isNetworkAvailable(this)) {
             Toast.makeText(this, "you are offline, we can't access your user data", Toast.LENGTH_LONG).show();
@@ -80,9 +78,11 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         if (user == null) {
-            Toast.makeText(this, "this app sucks and can't set a proper user!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Can't set a proper user!", Toast.LENGTH_LONG).show();
             return;
         }
+
+
         getSupportActionBar().setTitle("@" + user.getScreenName());
         populateProfileHeader(user);
     }
@@ -95,11 +95,12 @@ public class ProfileActivity extends AppCompatActivity {
         ImageView ivDisplaypic = (ImageView) findViewById(R.id.ivDisplayPic);
         tvname.setText(user.getName());
         tvTagline.setText(user.getTagLine());
-        tvFollowers.setText(user.getFollowersCount()+" Followers");
-        tvFollowing.setText(user.getFriendsCount()+" Following");
+        tvFollowers.setText(user.getFollowersCount() + " Followers");
+        tvFollowing.setText(user.getFriendsCount() + " Following");
         Glide.with(this).load(user.getProfileImageUrl()).fitCenter().centerCrop().into(ivDisplaypic);
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

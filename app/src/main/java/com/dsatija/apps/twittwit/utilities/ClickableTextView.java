@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.TextView;
 
-public class ClickableTextView extends TextView{
+public class ClickableTextView extends TextView {
     public ClickableTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
